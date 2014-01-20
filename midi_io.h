@@ -1,5 +1,5 @@
 /**********************************************************************
-*          Copyright (c) 2008, Hogeschool voor de Kunsten Utrecht
+*          Copyright (c) 2014, Hogeschool voor de Kunsten Utrecht
 *                      Hilversum, the Netherlands
 *                          All rights reserved
 ***********************************************************************
