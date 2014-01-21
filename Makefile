@@ -16,18 +16,39 @@ CFLAGS = -Wall -I${RACKET_HOME}/include
 LDFLAGS = -lportmidi -lpthread -lstdc++
 
 
+# determine OS
+# For Linux:
+# - shared libs have extension so
+# - module path is compiled/native/x86_64-linux/3m
+# For OSX (Darwin):
+# - shared libs have extension dylib
+# - module path is compiled/native/i386-macosx/3m
+
+UNAME=$(shell uname)
+
+ifeq ($(UNAME),Linux)
+ LIBEXT=so
+ MODPATH=compiled/native/x86_64-linux/3m
+endif
+
+ifeq ($(UNAME),Darwin)
+ LIBEXT=dylib
+ MODPATH=compiled/native/i386-macosx/3m
+endif
+
+# ---------------------------
+
 all: midi_extension.so
 
 midi_extension.so: midi_extension.cpp midi_io.cpp
 	${RACKET_HOME}/bin/mzc --cc midi_extension.cpp
 	${RACKET_HOME}/bin/mzc --cc midi_io.cpp
 	# put the shared object in a 'known' place for module extensions
-	mkdir -p compiled/native/x86_64-linux/3m
+	mkdir -p ${MODPATH}
 	${RACKET_HOME}/bin/mzc --3m --ld \
-	  compiled/native/x86_64-linux/3m/midi_extension_rkt.so \
-	  midi_extension.o midi_io.o ${LDFLAGS}
+	  ${MODPATH}/midi_extension_rkt.${LIBEXT} midi_extension.o midi_io.o ${LDFLAGS}
 
 clean:
-	rm -f *.o compiled/native/x86_64-linux/3m/racket_extension_rkt.so
+	rm -f *.o ${MODPATH}/midi_extension_rkt.${LIBEXT}
 	rm -f `find . -perm +111 -type f`
 
