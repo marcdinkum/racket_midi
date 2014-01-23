@@ -25,7 +25,7 @@
 *		   Wrapper class for portmidi
 *
 *
-*  Author        : Marc_G
+*  Author        : Marc Groenewegen
 *  E-mail        : marcg@dinkum.nl
 *
 **********************************************************************/
