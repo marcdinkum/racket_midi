@@ -5,12 +5,12 @@
 /*
  * The following functions are exported to Scheme. NB: after initialising
  * you can't change input or output so set input/output device BEFORE
- * calling init-midi-out!
+ * calling init-midi-io!
  *
  * (list-devices)
  * (set-input-device)
  * (set-output-device)
- * (init-midi-out)
+ * (init-midi-io)
  * (note-on)
  * (note-off)
  * (read-midi-event)
@@ -24,17 +24,17 @@ static Scheme_Object *list_devices(int argc, Scheme_Object **argv)
 const PmDeviceInfo *info; // portMidi device info
 Scheme_Object *output_list;
 
-/*
- * Use PortMidi info to build an array of device info objects
- */
-Scheme_Object *device_info[Pm_CountDevices()];
+  /*
+   * Use PortMidi info to build an array of device info objects
+   */
+  Scheme_Object *device_info[Pm_CountDevices()];
 
-/* device info object with details about the device:
- *  int index
- *  string direction -->  IN or OUT
- *  string name
- */
-Scheme_Object *device_info_detail[Pm_CountDevices()][3];
+  /* device info object with details about the device:
+   *  int index
+   *  string direction -->  IN or OUT
+   *  string name
+   */
+  Scheme_Object *device_info_detail[Pm_CountDevices()][3];
 
   // Build a list of lists
   for(int d=0;d<Pm_CountDevices();d++)
@@ -142,14 +142,17 @@ Scheme_Object *resultvector[4];
     channel=Pm_MessageStatus(event.message)&0xf;
     data1=Pm_MessageData1(event.message);
     data2=Pm_MessageData2(event.message);
-    resultvector[0]=scheme_make_integer((int)channel);
-    resultvector[1]=scheme_make_integer((int)cmd);
+    resultvector[0]=scheme_make_integer((int)cmd);
+    resultvector[1]=scheme_make_integer((int)channel);
     resultvector[2]=scheme_make_integer((int)data1);
     resultvector[3]=scheme_make_integer((int)data2);
     return scheme_build_list(4,resultvector);
   } // if event read
-  else return scheme_false;
-} // note_off()
+  else {
+    resultvector[0]=resultvector[1]=resultvector[2]=resultvector[3]=scheme_make_integer(0);
+    return scheme_build_list(4,resultvector);
+  }
+} // read_event()
 
 
 
@@ -166,7 +169,7 @@ mod_env = scheme_primitive_module(scheme_intern_symbol("midi_extension"),env);
   proc=scheme_make_prim_w_arity(set_output_device,"set-output-device",1,1);
   scheme_add_global("set-output-device",proc,mod_env);
   proc=scheme_make_prim_w_arity(init,"init",0,0);
-  scheme_add_global("init-midi-out",proc,mod_env);
+  scheme_add_global("init-midi-io",proc,mod_env);
   proc=scheme_make_prim_w_arity(note_on,"note-on",3,3);
   scheme_add_global("note-on",proc,mod_env);
   proc=scheme_make_prim_w_arity(note_off,"note-off",3,3);
