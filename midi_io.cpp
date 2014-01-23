@@ -118,9 +118,11 @@ const PmDeviceInfo *info;
 	       NULL,
 	       (void *)NULL); // void * time_info
 
-  // Filter everything but note events
-  Pm_SetFilter(midi_in, PM_FILT_REALTIME | PM_FILT_AFTERTOUCH |
-    PM_FILT_PROGRAM | PM_FILT_PITCHBEND | PM_FILT_CONTROL);
+  /*
+    Pm_SetFilter(midi_in, PM_FILT_REALTIME | PM_FILT_AFTERTOUCH |
+      PM_FILT_PROGRAM | PM_FILT_PITCHBEND | PM_FILT_CONTROL);
+  */
+  Pm_SetFilter(midi_in,PM_FILT_REALTIME); // only block realtime msg
 
 
   /*
