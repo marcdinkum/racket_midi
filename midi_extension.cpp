@@ -5,12 +5,13 @@
 /*
  * The following functions are exported to Scheme. NB: after initialising
  * you can't change input or output so set input/output device BEFORE
- * calling init-midi-io!
+ * calling start-midi-io!
  *
  * (list-devices)
  * (set-input-device)
  * (set-output-device)
- * (init-midi-io)
+ * (start-midi-io)
+ * (stop-midi-io)
  * (note-on)
  * (note-off)
  * (read-midi-event)
@@ -80,11 +81,18 @@ intptr_t device;
 } // set_output_device()
 
 
-static Scheme_Object *init(int argc, Scheme_Object **argv)
+static Scheme_Object *startmidi(int argc, Scheme_Object **argv)
 {
   midi_io.initialise();
   return scheme_void;
-} // init()
+} // startmidi()
+
+
+static Scheme_Object *stopmidi(int argc, Scheme_Object **argv)
+{
+  midi_io.finalise();
+  return scheme_void;
+} // stopmidi()
 
 
 static Scheme_Object *note_on(int argc, Scheme_Object **argv)
@@ -168,8 +176,10 @@ mod_env = scheme_primitive_module(scheme_intern_symbol("midi_extension"),env);
   scheme_add_global("set-input-device",proc,mod_env);
   proc=scheme_make_prim_w_arity(set_output_device,"set-output-device",1,1);
   scheme_add_global("set-output-device",proc,mod_env);
-  proc=scheme_make_prim_w_arity(init,"init",0,0);
-  scheme_add_global("init-midi-io",proc,mod_env);
+  proc=scheme_make_prim_w_arity(startmidi,"startmidi",0,0);
+  scheme_add_global("start-midi-io",proc,mod_env);
+  proc=scheme_make_prim_w_arity(stopmidi,"stopmidi",0,0);
+  scheme_add_global("stop-midi-io",proc,mod_env);
   proc=scheme_make_prim_w_arity(note_on,"note-on",3,3);
   scheme_add_global("note-on",proc,mod_env);
   proc=scheme_make_prim_w_arity(note_off,"note-off",3,3);
