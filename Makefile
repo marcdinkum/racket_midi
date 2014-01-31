@@ -13,7 +13,7 @@
 
 CC = g++
 CFLAGS = -Wall -I${RACKET_HOME}/include
-LDFLAGS = -lportmidi -lpthread -lstdc++
+LDFLAGS = -L/usr/local/lib -lportmidi -lpthread -lstdc++
 
 
 # determine OS
@@ -26,6 +26,15 @@ LDFLAGS = -lportmidi -lpthread -lstdc++
 
 UNAME=$(shell uname)
 
+# machine name, i386 (32-bit), x86_64 (64-bit)
+# NB: don't put this comment on the next line as it will add a SPACE
+#  to ARCH (!)
+# Actually we won't be using this as we need Racket's architecure type
+ARCH=$(shell uname -m)
+
+# derive Racket architecture by evaluating a command in $RACKET_HOME/bin/racket
+RACKET_ARCH=$(shell tell64bitracket.sh)
+
 ifeq ($(UNAME),Linux)
  LIBEXT=so
  MODPATH=compiled/native/x86_64-linux/3m
@@ -33,7 +42,7 @@ endif
 
 ifeq ($(UNAME),Darwin)
  LIBEXT=dylib
- MODPATH=compiled/native/i386-macosx/3m
+ MODPATH=compiled/native/${RACKET_ARCH}-macosx/3m
 endif
 
 # ---------------------------

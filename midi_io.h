@@ -36,7 +36,7 @@
 #include <iostream>
 #include <sys/time.h>
 #include <unistd.h> // usleep
-#include <portmidi.h>
+#include "portmidi.h"
 
 using namespace std;
 
