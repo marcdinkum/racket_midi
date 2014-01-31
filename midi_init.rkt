@@ -38,21 +38,21 @@
 
 (require "midi_extension.rkt")
 
-(list-devices)
+(list-midi-devices)
 
 ; DrRacket
 (display "Input: ")
-(set-input-device (string->number (read-line)))
+(set-midi-input (string->number (read-line)))
 (display "Output: ")
-(set-output-device (string->number (read-line)))
+(set-midi-output (string->number (read-line)))
 
 ; racket CLI
 ; (display "Input: ")
-; (set-input-device (read))
+; (set-midi-input (read))
 
 ; racket CLI
 ; (display "Output: ")
-; (set-output-device (read))
+; (set-midi-output (read))
 
 
 ; Start the MIDI engine. Do this AFTER selecting in- and output!
