@@ -28,7 +28,7 @@
 ;  repeating commands, copy-pasting code and developing interactively
 ;  but lacks the debugging features of DrRacket
 ;
-;  Author        : Marc_G
+;  Author        : Marc Groenewegen
 ;  E-mail        : marcg@dinkum.nl
 ;
 ;*********************************************************************/

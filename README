@@ -20,6 +20,18 @@ To use it:
 (require "midi_extension.rkt")
 
 
+These procedures are at your disposal:
+ 
+ * (list-midi-devices)
+ * (set-midi-input <device number>)
+ * (set-midi-output <device number>)
+ * (start-midi-io)
+ * (stop-midi-io)
+ * (note-on <channel> <pitch> <velocity>)
+ * (note-off <channel> <pitch> <velocity>)
+ * (read-midi-event)
+
+
 /*
 typedef struct device_info
 {

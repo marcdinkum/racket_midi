@@ -33,11 +33,11 @@ UNAME=$(shell uname)
 ARCH=$(shell uname -m)
 
 # derive Racket architecture by evaluating a command in $RACKET_HOME/bin/racket
-RACKET_ARCH=$(shell tell64bitracket.sh)
+RACKET_ARCH=$(shell ./tell64bitracket.sh)
 
 ifeq ($(UNAME),Linux)
  LIBEXT=so
- MODPATH=compiled/native/x86_64-linux/3m
+ MODPATH=compiled/native/${RACKET_ARCH}-linux/3m
 endif
 
 ifeq ($(UNAME),Darwin)
@@ -59,5 +59,4 @@ midi_extension.so: midi_extension.cpp midi_io.cpp
 
 clean:
 	rm -f *.o ${MODPATH}/midi_extension_rkt.${LIBEXT}
-	rm -f `find . -perm +111 -type f`
 
