@@ -114,7 +114,17 @@ intptr_t device;
 
 static Scheme_Object *startmidi(int argc, Scheme_Object **argv)
 {
-  midi_io.initialise();
+  int status=midi_io.initialise();
+  if(status < 0){
+    switch(status) {
+      case ERROR_OPEN_INPUT: scheme_signal_error("Error opening input port");
+      break;
+      case ERROR_OPEN_OUTPUT: scheme_signal_error("Error opening output port");
+      break;
+      default: scheme_signal_error("Unknown error");
+      break;
+    } // switch
+  }
   return scheme_void;
 } // startmidi()
 
@@ -200,6 +210,9 @@ Scheme_Object *scheme_reload(Scheme_Env *env)
 Scheme_Object *proc;
 Scheme_Env *mod_env;
 mod_env = scheme_primitive_module(scheme_intern_symbol("midi_extension"),env);
+
+  // make sure we start with a clean slate
+  midi_io.finalise();
 
   proc=scheme_make_prim_w_arity(list_devices,"list-midi-devices",0,0);
   scheme_add_global("list-midi-devices",proc,mod_env);

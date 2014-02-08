@@ -43,6 +43,8 @@ using namespace std;
 #define OUT_QUEUE_SIZE 1024
 #define RESOLUTION      1000     // usec
 
+#define ERROR_OPEN_INPUT	-1
+#define ERROR_OPEN_OUTPUT	-2
 
 /*
  * Due to the portmidi callbacks we need to declare a couple of
@@ -63,7 +65,7 @@ public:
   int list_devices();
   void set_input_device(int device);
   void set_output_device(int device);
-  void initialise();
+  int initialise();
   long get_currenttime();
   void reset_timebase();
   void set_input_filter(unsigned int filters);

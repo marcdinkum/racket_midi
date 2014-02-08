@@ -91,7 +91,7 @@ void MIDI_io::set_output_device(int device)
  * Don't make any calls to PortMidi from this thread once
  *  the midi thread begins.
  */
-void MIDI_io::initialise()
+int MIDI_io::initialise()
 {
 const PmDeviceInfo *info;
 
@@ -106,8 +106,7 @@ const PmDeviceInfo *info;
   if(input_device == -1) input_device=Pm_GetDefaultInputDeviceID();
   info = Pm_GetDeviceInfo(input_device);
   if (info == NULL) {
-      cout << "Could not open input device " <<  input_device << endl;
-      exit(0);
+    return ERROR_OPEN_INPUT;
   }
   cout << "Opening input device " << info->interf << "," <<  info->name << endl;
 
@@ -131,8 +130,7 @@ const PmDeviceInfo *info;
   if(output_device == -1) output_device=Pm_GetDefaultOutputDeviceID();
   info = Pm_GetDeviceInfo(output_device);
   if (info == NULL) {
-      cout << "Could not open output device << " << output_device << endl;
-      exit(0);
+    return ERROR_OPEN_OUTPUT;
   }
   cout << "Opening output device " << info->interf << "," <<  info->name << endl;
 
@@ -148,6 +146,8 @@ const PmDeviceInfo *info;
 
 
   active = true;
+
+  return 0;
 } // initialise()
 
 
